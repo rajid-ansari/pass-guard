@@ -1,3 +1,4 @@
+const blackListTokenModel = require("../models/blackListToken-model");
 const userModel = require("../models/user-model");
 const generateToken = require("../utils/generateToken");
 const hashPassword = require("../utils/hashPassword");
@@ -7,9 +8,21 @@ const bcrypt = require("bcrypt");
 module.exports.registerUser = async (req, res) => {
     const { fullname, email, password } = req.body;
 
-    if (!fullname || !email || !password) {
-        return res.status(400).json({ error: "All fields are required" });
+    if (!fullname || fullname.length < 3) {
+        return res
+            .status(400)
+            .json({ error: "fullname must be atleast 3 characters" });
     }
+    if (!password || password.length < 8) {
+        return res
+            .status(400)
+            .json({ error: "Password must be atleast 8 characters" });
+    }
+
+    // const emailRegex = "";
+    // if (!email.test(emailRegex)) {
+    //     return res.status(400).json({ error: "Invalid email format" });
+    // }
 
     try {
         const isAlreadyRegistered = await userModel.findOne({ email });
@@ -27,14 +40,19 @@ module.exports.registerUser = async (req, res) => {
             password: hashedPassword,
         });
 
-        const token = generateToken(newUser);
+        const token = generateToken(newUser._id);
         if (token) {
-            res.cookie("authToken", token);
+            res.cookie("accessToken", token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "None",
+                maxAge: 60 * 60 * 1000, //1hour ----- need to change later
+            });
             res.status(201).json({ message: "Registered successfully" });
         }
     } catch (error) {
         console.log(`Register user :: ${error.message}`);
-        res.status(400).json({ error: "All fields are required" });
+        res.status(500).json({ error: "Something went wrong, try again." });
     }
 };
 
@@ -51,11 +69,16 @@ module.exports.loginUser = async (req, res) => {
             return res.status(404).json({ error: "Invalid email or password" });
 
         const isMatched = await bcrypt.compare(password, user.password);
-        if (!isMatched) 
+        if (!isMatched)
             return res.status(404).json({ error: "Invalid email or password" });
 
-        const token = generateToken(user);
-        res.cookie("authToken", token);
+        const token = generateToken(user._id);
+        res.cookie("accessToken", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "None",
+            maxAge: 60 * 60 * 1000, //1hour ----- need to change later
+        });
         res.status(200).json({ message: "Logged in successfully" });
     } catch (error) {
         console.log(`Login user :: ${error.message}`);
@@ -65,11 +88,23 @@ module.exports.loginUser = async (req, res) => {
 
 // logout user
 module.exports.logoutUser = async (req, res) => {
+    const token = req.cookies["accessToken"] || req.headers.authorization?.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({ error: "Unauthorize access" });
+    }
+
     try {
-        res.clearCookie("authToken");
-        res.status(200).json({ message: "Logged out successfully" });
+        await blackListTokenModel.create({ token });
+
+        res.clearCookie("accessToken");
+        res.status(200).json({ message: "Logged out successfully." });
     } catch (error) {
         console.log(`logout user :: ${error.message}`);
-        res.status(500).json({ error: "something went wrong, try again" });
+        res.status(500).json({ error: "something went wrong, try again." });
     }
 };
+
+// user profile
+module.exports.userProfile = async (req, res) => {
+    res.status(200).json(req.user);
+}

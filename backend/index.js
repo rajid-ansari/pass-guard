@@ -13,15 +13,13 @@ const PORT = process.env.PORT || 3000;
 
 connectDB();
 
-app.get("/", (req, res) => {
-    res.send("Pass Guard, Manager.");
-});
-
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
+app.get("/", (req, res) => {
+    res.send("Pass Guard, Manager.");
+});
 
 app.use("/user", userRoutes);
 
