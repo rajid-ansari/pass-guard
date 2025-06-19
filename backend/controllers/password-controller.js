@@ -51,19 +51,16 @@ module.exports.deletePassword = async (req, res) => {
     const passwordId = req.params.id;
 
     if (!passwordId) {
-        return res.status(400).json({ error: "Id not found." });
+        return res.status(404).json({ error: "Id not found." });
     }
 
     try {
         const passwordDocument = await voultModel.findById(passwordId);
 
-        console.log(userId.toString());
-        console.log(passwordDocument.userId.toString());
-
         if (passwordDocument.userId.toString() !== userId.toString()) {
-            return res
-                .status(403)
-                .json({ error: "You can't delete this password." });
+            return res.status(403).json({
+                error: "You don't have access to delete this password.",
+            });
         }
 
         await voultModel.findByIdAndDelete(passwordId);
@@ -72,8 +69,49 @@ module.exports.deletePassword = async (req, res) => {
             $pull: { voult: passwordId },
         });
 
-        res.status(200).json({message: "Password deleted."});
+        res.status(200).json({ message: "Password deleted." });
     } catch (error) {
-        res.status(500).json({error: "Internal server error, try again."})
+        res.status(500).json({ error: "Internal server error, try again." });
+    }
+};
+
+// update password
+module.exports.updatePassword = async (req, res) => {
+    const userId = req.userId;
+    const passwordId = req.params.id;
+    const { site, username, password } = req.body;
+
+    if (!site || !password) {
+        return res
+            .status(400)
+            .json({ error: "site and password fields are mandatory." });
+    }
+
+    if (!passwordId) {
+        return res.status(404).json({ error: "Password id not found." });
+    }
+
+    try {
+        const passwordDocument = await voultModel.findById(passwordId);
+
+        if (passwordDocument.userId.toString() !== userId.toString()) {
+            return res.status(403).json({
+                error: "You don't have access to update this password",
+            });
+        }
+        console.log(password);
+        const hashedPassword = await hashPassword(password);
+        console.log(hashedPassword);
+
+        await voultModel.findByIdAndUpdate(passwordId, {
+            site,
+            username,
+            password: hashedPassword,
+        });
+
+        res.status(200).json({ message: "Password updated" });
+    } catch (error) {
+        console.log(`update password :: ${error.message}`);
+        res.status(500).json({ error: "Internal server error, try again." });
     }
 };
