@@ -1,13 +1,15 @@
 require("dotenv").config();
 
 const express = require("express");
+const cookieParser = require("cookie-parser");
+
 const app = express();
 
 const connectDB = require("./db/db");
 
 // routes
 const userRoutes = require("./routes/user-routes");
-const cookieParser = require("cookie-parser");
+const passwordRoutes = require("./routes/password-routes");
 
 const PORT = process.env.PORT || 3000;
 
@@ -22,6 +24,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/password", passwordRoutes);
 
 
 app.listen(PORT, () => {

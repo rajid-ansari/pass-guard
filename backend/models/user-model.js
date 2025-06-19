@@ -20,8 +20,15 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             min: [8, "Password should be atleast 8 characters."],
-			select: false,
+            select: false,
         },
+
+        voult: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Voult",
+            },
+        ],
     },
     { timestamps: true }
 );

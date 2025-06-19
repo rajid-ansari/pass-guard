@@ -106,5 +106,10 @@ module.exports.logoutUser = async (req, res) => {
 
 // user profile
 module.exports.userProfile = async (req, res) => {
-    res.status(200).json(req.user);
+    try {
+        const user = await userModel.findOne({_id: req.userId}).populate("voult");
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(404).json({error: "profile not found"});
+    }
 }

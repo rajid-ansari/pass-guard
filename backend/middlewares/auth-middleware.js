@@ -16,7 +16,7 @@ module.exports.userAuth = async (req, res, next) => {
 
 		const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 		const user = await userModel.findOne({_id: decoded.id});
-		req.user = user;
+		req.userId = user._id;
 		next();
 	} catch (error) {
 		res.status(401).json({error: "Invalid access token"});
