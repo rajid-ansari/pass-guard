@@ -19,13 +19,13 @@ module.exports.savePassword = async (req, res) => {
             site,
             username,
             password: hashedPassword,
-			userId: req.userId, //mapped user with voult
+            userId: req.userId, //mapped user with voult
         });
-		// now map voult back to user
-		const user = await userModel.findOne({_id: req.userId})
+        // now map voult back to user
+        const user = await userModel.findOne({ _id: req.userId });
 
-		user.voult.push(newPassword._id);
-		await user.save();
+        user.voult.push(newPassword._id);
+        await user.save();
 
         res.status(201).json({ message: "Password saved" });
     } catch (error) {
@@ -36,9 +36,44 @@ module.exports.savePassword = async (req, res) => {
 // listing all paswords
 module.exports.getAllPasswords = async (req, res) => {
     try {
-        const allPasswords = await voultModel.find({userId: req.userId}).populate("userId");
+        const allPasswords = await voultModel
+            .find({ userId: req.userId })
+            .populate("userId");
         res.status(200).json(allPasswords);
     } catch (error) {
-        res.status(404).json({ error: "Error fetching passwords" });
+        res.status(404).json({ error: "Error fetching passwords." });
+    }
+};
+
+// password deletion
+module.exports.deletePassword = async (req, res) => {
+    const userId = req.userId;
+    const passwordId = req.params.id;
+
+    if (!passwordId) {
+        return res.status(400).json({ error: "Id not found." });
+    }
+
+    try {
+        const passwordDocument = await voultModel.findById(passwordId);
+
+        console.log(userId.toString());
+        console.log(passwordDocument.userId.toString());
+
+        if (passwordDocument.userId.toString() !== userId.toString()) {
+            return res
+                .status(403)
+                .json({ error: "You can't delete this password." });
+        }
+
+        await voultModel.findByIdAndDelete(passwordId);
+
+        await userModel.findByIdAndUpdate(userId, {
+            $pull: { voult: passwordId },
+        });
+
+        res.status(200).json({message: "Password deleted."});
+    } catch (error) {
+        res.status(500).json({error: "Internal server error, try again."})
     }
 };
