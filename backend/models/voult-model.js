@@ -19,6 +19,11 @@ const voultSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
+	},
+
+	iv: {
+		type: String,
+		required: true,
 	}
 
 }, {timestamps: true});

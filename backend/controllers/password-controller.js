@@ -1,6 +1,8 @@
 const voultModel = require("../models/voult-model");
 const userModel = require("../models/user-model");
 const hashPassword = require("../utils/hashPassword");
+const encryptPassword = require("../utils/encrypt");
+const decryptPassword = require("../utils/decrypt");
 
 // saving password
 module.exports.savePassword = async (req, res) => {
@@ -13,13 +15,14 @@ module.exports.savePassword = async (req, res) => {
     }
 
     try {
-        const hashedPassword = await hashPassword(password);
+        const { encryptedData, iv } = encryptPassword(password);
 
         const newPassword = await voultModel.create({
             site,
             username,
-            password: hashedPassword,
+            password: encryptedData,
             userId: req.userId, //mapped user with voult
+            iv,
         });
         // now map voult back to user
         const user = await userModel.findOne({ _id: req.userId });
@@ -33,14 +36,23 @@ module.exports.savePassword = async (req, res) => {
     }
 };
 
-// listing all paswords
+// listing all paswords of logged in user
 module.exports.getAllPasswords = async (req, res) => {
     try {
-        const allPasswords = await voultModel
+        const voults = await voultModel
             .find({ userId: req.userId })
             .populate("userId");
-        res.status(200).json(allPasswords);
+
+        const decryptedVoults = voults.map((voult) => {
+            const plainObj = voult.toObject();
+            plainObj.password = decryptPassword(plainObj.password, plainObj.iv);
+
+            return plainObj;
+        });
+
+        res.status(200).json(decryptedVoults);
     } catch (error) {
+        console.log(`fetching password :: ${error.message}`);
         res.status(404).json({ error: "Error fetching passwords." });
     }
 };
@@ -99,14 +111,14 @@ module.exports.updatePassword = async (req, res) => {
                 error: "You don't have access to update this password",
             });
         }
-        console.log(password);
-        const hashedPassword = await hashPassword(password);
-        console.log(hashedPassword);
+
+        const { encryptedData, iv } = encryptPassword(password);
 
         await voultModel.findByIdAndUpdate(passwordId, {
             site,
             username,
-            password: hashedPassword,
+            password: encryptPassword,
+            iv,
         });
 
         res.status(200).json({ message: "Password updated" });
