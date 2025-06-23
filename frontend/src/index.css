@@ -1,1 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
 @import "tailwindcss";
+
+
+@theme {
+	--color-primary: #1e3a8a;
+	--color-secondary: #1e3bba;
+	--color-accent: #e11d48;
+	--color-emarGreen: #10b981;
+	--color-light: #f0eded;
+	--color-dark: #262626;
+
+	--font-poppins: "Poppins";
+	--font-montserrat: "Montserrat";
+	--font-outfit: "Outfit";
+}
+
+@layer utilities {
+  .custom-glow {
+    text-shadow: 0 0 5px #ffffff62, 0 0 10px #8c9db954, 0 0 15px #b3c2d922;
+  }
+}
