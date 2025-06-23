@@ -7,7 +7,7 @@ const LinkBtn = React.forwardRef(
             <Link
                 to={path}
                 ref={ref}
-                className={`py-2 px-6 rounded-md bg-primary text-slate-100 font-poppins cursor-pointer hover:bg-secondary shadow-xl ${classname}`}
+                className={`py-2 px-6 rounded-md bg-primary text-slate-100 cursor-pointer hover:bg-secondary shadow-xl ${classname}`}
                 {...props}
             >
                 {children}

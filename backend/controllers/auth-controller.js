@@ -48,7 +48,10 @@ module.exports.registerUser = async (req, res) => {
                 sameSite: "None",
                 maxAge: 60 * 60 * 1000, //1hour ----- need to change later
             });
-            res.status(201).json({ message: "Registered successfully" });
+            res.status(201).json({
+                message: "Registered successfully",
+                user: newUser,
+            });
         }
     } catch (error) {
         console.log(`Register user :: ${error.message}`);
@@ -79,7 +82,7 @@ module.exports.loginUser = async (req, res) => {
             sameSite: "None",
             maxAge: 60 * 60 * 1000, //1hour ----- need to change later
         });
-        res.status(200).json({ message: "Logged in successfully" });
+        res.status(200).json({ message: "Logged in successfully", user });
     } catch (error) {
         console.log(`Login user :: ${error.message}`);
         res.status(404).json({ error: "Invalid email or password" });
@@ -107,9 +110,11 @@ module.exports.logoutUser = async (req, res) => {
 // user profile
 module.exports.userProfile = async (req, res) => {
     try {
-        const user = await userModel.findOne({_id: req.userId}).populate("voult");
+        const user = await userModel
+            .findOne({ _id: req.userId })
+            .populate("voult");
         res.status(200).json(user);
     } catch (error) {
-        res.status(404).json({error: "profile not found"});
+        res.status(404).json({ error: "profile not found" });
     }
-}
+};
