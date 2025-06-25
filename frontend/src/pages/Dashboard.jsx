@@ -7,7 +7,7 @@ const Dashboard = () => {
   const { user } = useAuth();
 
   return (
-  <main className='min-h-screen w-full bg-light'>
+  <main className='min-h-screen w-full '>
     <div>
       <nav className="px-3 md:px-18 h-14 shadow font-outfit transition-all duration-100 ease-linear">
             <div className="h-full w-full  flex items-center justify-between">
@@ -22,7 +22,12 @@ const Dashboard = () => {
                         PassGuard
                     </h2>
                 </div>
-                <LogOut />
+                <div className='flex items-center gap-3'>
+                    <div>
+                        <h2>Hii, <span className='text-primary font-semibold font-poppins'>{user.fullname}</span> </h2>
+                    </div>
+                    <LogOut />
+                </div>
             </div>
         </nav>
     </div>

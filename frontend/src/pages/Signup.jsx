@@ -18,6 +18,11 @@ const Signup = () => {
 
     const { setUser } = useAuth();
 
+    const isValidEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -31,6 +36,11 @@ const Signup = () => {
         if (password.length < 8) {
             setLoading(false);
             return setError("Password must should be atleast 8 characters");
+        }
+
+        if(!isValidEmail(email)) {
+            setLoading(false);
+            return setError("Invalid Email")
         }
 
         const newUser = {
@@ -47,7 +57,10 @@ const Signup = () => {
             );
 
             if (response.status === 201) {
-                localStorage.setItem("user", JSON.stringify(response.data.user));
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify(response.data.user)
+                );
                 setUser(response.data.user);
                 navigate("/dashboard");
             } else {
@@ -111,7 +124,7 @@ const Signup = () => {
                         </Link>
                     </div>
                     <div className="mt-10 h-10">
-                        <div className="text-red-500 text-sm text-center my-2">
+                        <div className="text-red-500 font-semibold font-outfit text-sm text-center my-2">
                             {error ? error : null}
                         </div>
                         <button

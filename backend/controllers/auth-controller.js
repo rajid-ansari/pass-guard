@@ -3,6 +3,7 @@ const userModel = require("../models/user-model");
 const generateToken = require("../utils/generateToken");
 const hashPassword = require("../utils/hashPassword");
 const bcrypt = require("bcrypt");
+const isValidEmail = require("../utils/isValidEmail");
 
 // register user
 module.exports.registerUser = async (req, res) => {
@@ -19,10 +20,9 @@ module.exports.registerUser = async (req, res) => {
             .json({ error: "Password must be atleast 8 characters" });
     }
 
-    // const emailRegex = "";
-    // if (!email.test(emailRegex)) {
-    //     return res.status(400).json({ error: "Invalid email format" });
-    // }
+    if(!isValidEmail(email)) {
+        return res.status(400).json({error: "Invalid email"});
+    }
 
     try {
         const isAlreadyRegistered = await userModel.findOne({ email });
