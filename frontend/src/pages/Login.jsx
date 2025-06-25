@@ -3,6 +3,7 @@ import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/UserContextProvider";
+import { ToastContainer, toast } from 'react-toastify';
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -43,11 +44,13 @@ const Login = () => {
             );
 
             if (response.status === 200) {
+                toast("Loggon in");
                 localStorage.setItem("user", JSON.stringify(response.data.user));
                 auth.setUser(response.data.user);
                 navigate("/dashboard");
             }
         } catch (error) {
+            toast("Something went wrong, try again.")
             setError("Invalid email or passowrd.");
             console.log(`sign-in error :: ${error}`);
         } finally {
@@ -60,6 +63,7 @@ const Login = () => {
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 px-2">
+            <ToastContainer theme="dark" />
             <div className="w-full max-w-md md:max-w-lg lg:max-w-xl py-10 px-5 rounded-md shadow-2xl bg-light transition-all duration-300">
                 <div className="mb-10 flex flex-col items-center">
                     <img
