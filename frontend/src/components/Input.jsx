@@ -1,28 +1,38 @@
 import React, { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import gsap, { Linear } from "gsap";
+import gsap from "gsap";
 
 const Input = React.forwardRef(
     ({ type, value, setValue, placeHolder, className, ...props }, ref) => {
         const pRef = useRef(null);
         const [textFlow, setTextFlow] = useState(false);
 
-		const focusHandler = () => {
-			setTextFlow(true);
-		}
+        const focusHandler = () => {
+            setTextFlow(true);
+        };
+
+        const blurHandler = () => {
+            if(!value) setTextFlow(false);
+        };
 
         useGSAP(() => {
             if (textFlow) {
                 gsap.to(pRef.current, {
                     top: -10,
-					duration: 0.1
+                    duration: 0.1
+                });
+            } else {
+                gsap.to(pRef.current, {
+                    top: 12,
+                    duration: 0.1
                 });
             }
         }, [textFlow]);
 
         return (
             <div
-			onFocus={focusHandler}
+                onFocus={focusHandler}
+                onBlur={blurHandler}
                 className="relative font-outfit"
             >
                 <p

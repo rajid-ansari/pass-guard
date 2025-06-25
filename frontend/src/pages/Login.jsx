@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { userContext } from "../contexts/UserContextProvider";
+import { useAuth } from "../contexts/UserContextProvider";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -12,13 +12,20 @@ const Login = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { _, setUser} = useContext(userContext);
+    const auth = useAuth();
     const navigate = useNavigate();
+
+    // if already logged in, redirect to /dashboard
+    useEffect(() => {
+        if (auth.user) {
+            return navigate("/dashboard");
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        setLoading(true)
+        setLoading(true);
 
         if (!email || !password) {
             return setError("Both fields are required.");
@@ -30,13 +37,14 @@ const Login = () => {
         };
 
         try {
-            const response = await axios.post(`${BASE_URI}/user/sign-in`, user, {
-                withCredentials: true,
-            });
+            const response = await axios.post(`${BASE_URI}/user/sign-in`,user, {
+                    withCredentials: true,
+                }
+            );
 
-            if(response.status === 200) {
+            if (response.status === 200) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
-                setUser(response.data.user);
+                auth.setUser(response.data.user);
                 navigate("/dashboard");
             }
         } catch (error) {
@@ -51,19 +59,19 @@ const Login = () => {
     };
 
     return (
-        <div className="h-screen w-full  flex items-center justify-center bg-slate-100">
-            <div className="h-2/3 w-1/4 py-10 px-5 rounded-md shadow-2xl bg-light">
-                <div className="mb-15 flex flex-col items-center">
+        <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 px-2">
+            <div className="w-full max-w-md md:max-w-lg lg:max-w-xl py-10 px-5 rounded-md shadow-2xl bg-light transition-all duration-300">
+                <div className="mb-10 flex flex-col items-center">
                     <img
                         src="pass_guard.png"
                         alt=""
                         width={45}
                         className="rounded-md"
                     />
-                    <h1 className="text-2xl text-dark font-outfit font-semibold ">
+                    <h1 className="text-2xl text-dark font-outfit font-semibold text-center">
                         Welcome back to PassGuard
                     </h1>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-500 mt-1 text-center">
                         Log in to access your encrypted vault.
                     </p>
                 </div>
@@ -86,8 +94,8 @@ const Login = () => {
                             required={true}
                         />
                     </div>
-                    <div className="mt-5 flex text-sm text-gray-600 font-semibold">
-                        <p>New here ?</p>
+                    <div className="mt-5 flex flex-col sm:flex-row gap-2 text-sm text-gray-600 font-semibold items-center">
+                        <p>New here?</p>
                         <Link to={"/signup"} className="text-primary underline">
                             Create account
                         </Link>
@@ -97,7 +105,7 @@ const Login = () => {
                             {error ? error : null}
                         </div>
                         <button
-                            className={`px-10  w-full bg-primary text-light py-2 rounded-md hover:bg-secondary cursor-pointer text-center `}
+                            className={`px-10 w-full bg-primary text-light py-2 rounded-md hover:bg-secondary cursor-pointer text-center transition-all duration-200`}
                         >
                             Start <span className="">→</span>
                         </button>

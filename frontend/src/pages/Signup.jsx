@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Input from "../components/Input";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { userContext } from "../contexts/UserContextProvider";
+import { useAuth } from "../contexts/UserContextProvider";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -16,24 +16,22 @@ const Signup = () => {
 
     const navigate = useNavigate();
 
-    const {_, setUser} = useContext(userContext);
+    const { setUser } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        setLoading(true)
+        setLoading(true);
 
         if (!fullname || !email || !password) {
-            setLoading(false)
+            setLoading(false);
             return setError("All fields are required.");
         }
 
         if (password.length < 8) {
-            setLoading(false)
+            setLoading(false);
             return setError("Password must should be atleast 8 characters");
         }
-
-        // have to add email verification
 
         const newUser = {
             fullname,
@@ -49,7 +47,6 @@ const Signup = () => {
             );
 
             if (response.status === 201) {
-                console.log(response.data.message)
                 localStorage.setItem("user", JSON.stringify(response.data.user));
                 setUser(response.data.user);
                 navigate("/dashboard");
@@ -58,9 +55,8 @@ const Signup = () => {
             }
         } catch (error) {
             console.log(`signup :: ${error}`);
-        } finally {   
+        } finally {
             setLoading(false);
-            // reseting inputs
             setFullname("");
             setEmail("");
             setPassword("");
@@ -68,11 +64,16 @@ const Signup = () => {
     };
 
     return (
-        <div className="h-screen w-full  flex items-center justify-center bg-slate-100">
-            <div className="min-h-2/3 w-1/4 py-10 px-5 rounded-md shadow-2xl bg-light">
-                <div className="mb-15 text-center flex flex-col items-center">
-                    <img src="pass_guard.png" alt="" width={45} className="rounded-md" />
-                    <h1 className="text-2xl text-dark font-poppins font-semibold">
+        <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 px-2">
+            <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-2xl py-8 px-4 sm:px-8 rounded-md shadow-2xl bg-light flex flex-col justify-center">
+                <div className="mb-10 text-center flex flex-col items-center">
+                    <img
+                        src="pass_guard.png"
+                        alt=""
+                        width={45}
+                        className="rounded-md"
+                    />
+                    <h1 className="text-2xl md:text-3xl text-dark font-poppins font-semibold mt-2">
                         Sign up & Start{" "}
                         <span className="text-primary">Encrypting</span> your
                         Passwords. 🔒
@@ -103,8 +104,8 @@ const Signup = () => {
                             placeHolder={"Enter your Password"}
                         />
                     </div>
-                    <div className="mt-5 flex text-sm text-gray-600 font-semibold">
-                        <p>Already have an account ?</p>
+                    <div className="mt-5 flex flex-col sm:flex-row gap-2 text-sm text-gray-600 font-semibold items-center">
+                        <p>Already have an account?</p>
                         <Link to={"/login"} className="text-primary underline">
                             sign In
                         </Link>
@@ -114,9 +115,17 @@ const Signup = () => {
                             {error ? error : null}
                         </div>
                         <button
-                            className={`px-10 w-full bg-primary text-light py-2 rounded-md hover:bg-secondary cursor-pointer text-center relative font-outfit`}
+                            className={`
+                                px-10 w-full bg-primary text-light py-2 rounded-md
+                                hover:bg-secondary cursor-pointer text-center relative font-outfit
+                                transition-all duration-200
+                            `}
                         >
-                            {loading ? (<span className="loader"></span>) : (`Start Securing`)}
+                            {loading ? (
+                                <span className="loader"></span>
+                            ) : (
+                                `Start Securing`
+                            )}
                         </button>
                     </div>
                 </form>
