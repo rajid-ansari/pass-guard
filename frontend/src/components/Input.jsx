@@ -37,7 +37,7 @@ const Input = React.forwardRef(
             >
                 <p
                     ref={pRef}
-                    className="absolute top-3 left-3 text-sm text-dark font-semibold bg-light"
+                    className="absolute top-3 left-3 text-sm text-gray-500 font-semibold bg-light"
                 >
                     {placeHolder} <span className="text-red-400">*</span>{" "}
                 </p>

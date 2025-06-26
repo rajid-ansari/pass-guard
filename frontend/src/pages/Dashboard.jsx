@@ -1,14 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../contexts/UserContextProvider";
 import { VscAdd } from "react-icons/vsc";
 import axios from "axios";
+import AddPassword from "../components/AddPassword";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
 const Dashboard = () => {
     const [voults, setVoults] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showAddPasswordPanel, setShowAddPasswordPanel] = useState(false);
+
+    const addPenelRef = useRef(null);
 
     const { user } = useAuth();
 
@@ -20,7 +26,7 @@ const Dashboard = () => {
             );
 
             if (response.status === 200) {
-                setVoults(response.data);
+                setVoults(response.data.reverse());
             }
         } catch (error) {
             console.log(`Error while password fetching ${error}`);
@@ -30,7 +36,19 @@ const Dashboard = () => {
     };
     useEffect(() => {
         getPasswords();
-    }, []);
+    }, [voults]);
+
+    useGSAP(() => {
+        if (showAddPasswordPanel) {
+            gsap.to(addPenelRef.current, {
+                scale: "1",
+            });
+        } else {
+            gsap.to(addPenelRef.current, {
+                scale: "0",
+            });
+        }
+    }, [showAddPasswordPanel]);
 
     return (
         <main className="h-screen w-full">
@@ -68,40 +86,57 @@ const Dashboard = () => {
                 className={`h-[92.3%] w-10/12 absolute top-14 right-0 border-l-2 border-light shadow-2xl z-1 py-2 px-7`}
             >
                 <div className="mt-3 ml-5">
-                    <button className="py-2 px-3 rounded-md bg-emarGreen text-white font-semibold font-outfit flex items-center gap-2 cursor-pointer active:bg-emerald-600 transition-all text-wrap">
+                    <button
+                    onClick={() => setShowAddPasswordPanel(true)}
+                    className="py-2 px-3 rounded-md bg-emarGreen text-white font-semibold font-outfit flex items-center gap-2 cursor-pointer active:bg-emerald-600 transition-all text-wrap">
                         Add New{" "}
                         <span>
                             <VscAdd className="font-bold h-5 w-5" />
                         </span>
                     </button>
                 </div>
-                <div className="mt-10 flex gap-3 flex-wrap">
+                
+                <div className="mt-5 ml-5">
+                    <h2 className="text-sm text-gray-600 leading-none font-poppins">Total saved - {voults.length}</h2>
+                </div>
+                <div className="mt-5 ml-5 flex gap-3 flex-wrap">
                     {voults.length > 0 ? (
                         voults.map((voult) => (
-                            <div key={voult._id} className="min-h-28 w-[16vw] py-1 px-3 rounded-md bg-light shadow text-wrap">
-                                <h2
-                                className="block text-center mb-2 font-semibold font-poppins text-primary underline">
+                            <div
+                                key={voult._id}
+                                className="min-h-28 w-[16vw] py-1 px-3 rounded-md bg-light shadow text-wrap"
+                            >
+                                <h2 className="block text-center mb-2 font-semibold font-poppins text-primary underline">
                                     {voult.site}
                                 </h2>
                                 <p className="text-gray-600 font-outfit">
-                                    username ~ 
+                                    username ~
                                     <span className="text-gray-800 font-semibold">
-                                        {" "}{voult.username}
+                                        {" "}
+                                        {voult.username}
                                     </span>
                                 </p>
                                 <p className="text-gray-600 font-outfit">
                                     Password ~
                                     <span className="text-gray-800 font-semibold">
-                                        {" "}{voult.password}
+                                        {" "}
+                                        {voult.password}
                                     </span>
                                 </p>
                             </div>
                         ))
                     ) : (
-                        <p>No voults</p>
+                        <p className="mt-3 text-gray-600 font-poppins text-sm">
+                            No voults.
+                        </p>
                     )}
                 </div>
             </div>
+            <AddPassword
+                showAddPasswordPanel={showAddPasswordPanel}
+                setShowAddPasswordPanel={setShowAddPasswordPanel}
+                ref={addPenelRef}
+                />
         </main>
     );
 };
