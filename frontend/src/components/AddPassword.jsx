@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Input from "./Input";
 import { useAuth } from "../contexts/UserContextProvider";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import generatePassword from "../../utils/generatePassword";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -13,6 +13,8 @@ const AddPassword = React.forwardRef(
         const [password, setPassword] = useState("");
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState("");
+
+        const {showPassword, setShowPassword} = useAuth();
 
         const savePassword = async (e) => {
             e.preventDefault();
@@ -50,6 +52,11 @@ const AddPassword = React.forwardRef(
                 setPassword("");
             }
         };
+
+        const handlePasswordGenerate = () => {
+            const password = generatePassword();
+            setPassword(password);
+        }
 
         return (
             <>
@@ -115,7 +122,7 @@ const AddPassword = React.forwardRef(
                                 </label>
                                 <div className="bg-light mb-3 relative">
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password" }
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
                                         placeholder="*********"
@@ -125,7 +132,11 @@ const AddPassword = React.forwardRef(
                                         className="h-full w-full px-4 py-2 rounded-md outline-none border-[1px] border-gray-400 text-gray-700 font-poppins"
                                     />
                                     <span
-                                        // onClick={generatePassword}
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    className="absolute top-[8px] right-[86px] text-xl cursor-pointer z-10 font-outfit"
+                                    >{showPassword ? '🫣' : '😴'}</span>
+                                    <span
+                                        onClick={handlePasswordGenerate}
                                         className="absolute top-[5px] right-[5px] bg-accent active:bg-accent/90 text-light p-1 cursor-pointer rounded-md font-outfit"
                                     >
                                         {" "}

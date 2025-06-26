@@ -6,6 +6,7 @@ import axios from "axios";
 import AddPassword from "../components/AddPassword";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { CgProfile } from "react-icons/cg";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -67,13 +68,14 @@ const Dashboard = () => {
                             </h2>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div>
+                            <div className="flex items-center gap-3">
                                 <h2>
-                                    Hii,{" "}
+                                    Hey,{" "}
                                     <span className="text-primary font-semibold font-poppins">
                                         {user.fullname}
                                     </span>{" "}
                                 </h2>
+                                <CgProfile className="text-xl" />
                             </div>
                         </div>
                     </div>
@@ -104,7 +106,7 @@ const Dashboard = () => {
                         voults.map((voult) => (
                             <div
                                 key={voult._id}
-                                className="min-h-28 w-[16vw] py-1 px-3 rounded-md bg-light shadow text-wrap"
+                                className="min-h-28 w-[16vw] py-1 px-3 rounded-md bg-light shadow-lg text-wrap border-[1px] border-dark/30"
                             >
                                 <h2 className="block text-center mb-2 font-semibold font-poppins text-primary underline">
                                     {voult.site}
@@ -116,13 +118,10 @@ const Dashboard = () => {
                                         {voult.username}
                                     </span>
                                 </p>
-                                <p className="text-gray-600 font-outfit">
-                                    Password ~
-                                    <span className="text-gray-800 font-semibold">
-                                        {" "}
-                                        {voult.password}
-                                    </span>
-                                </p>
+                                <div className="text-gray-600 font-outfit flex items-center">
+                                    <span className="w-24">Password ~</span>
+                                    <input type="password" value={voult.password} className="text-gray-800 w-2/3" />
+                                </div>
                             </div>
                         ))
                     ) : (

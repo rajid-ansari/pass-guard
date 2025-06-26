@@ -1,13 +1,11 @@
 import React from "react";
-import { AiOutlineMenu } from "react-icons/ai";
+import { IoIosArrowForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 import LogOut from "./LogOut";
 
 const Sidebar = () => {
     return (
-        <section
-            className="absolute top-0 left-0 h-full w-full bg-light shadow-2xl font-poppins text-nowrap overflow-hidden"
-        >
+        <section className="absolute top-0 left-0 h-full w-full bg-light shadow-2xl font-poppins text-nowrap overflow-hidden">
             <div className="flex items-end px-3 justify-end h-14">
                 <p className="text-gray-500">Actions</p>
             </div>
@@ -16,26 +14,32 @@ const Sidebar = () => {
                 <div className="flex flex-col gap-2 h-[80%]">
                     <Link
                         to={"/dashboard"}
-                        className="text-gray-800 active:text-primary w-fit"
+                        className="text-gray-800 active:text-primary w-fit cursor-pointer flex items-center select-none"
                     >
+                        <span>
+                            <IoIosArrowForward />
+                        </span>
                         Dashboard
                     </Link>
                     <Link
                         to={"/voult"}
-                        className="text-gray-800 active:text-primary w-fit"
+                        className="text-gray-800 active:text-primary w-fit cursor-pointer flex items-center select-none"
                     >
+                        <span>
+                            <IoIosArrowForward />
+                        </span>
                         Voult
                     </Link>
-                    <Link
-                        to={"/generate-password"}
-                        className="text-gray-800 active:text-primary w-fit"
-                    >
+                    <h2 className="text-gray-800 active:text-primary w-fit cursor-pointer flex items-center select-none">
+                        <span>
+                            <IoIosArrowForward />
+                        </span>
                         Generate Password
-                    </Link>
+                    </h2>
                 </div>
-				<div>
-                        <LogOut className={`text-nowrap`} />
-                    </div>
+                <div>
+                    <LogOut className={`text-nowrap`} />
+                </div>
             </div>
         </section>
     );
