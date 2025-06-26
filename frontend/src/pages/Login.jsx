@@ -13,12 +13,12 @@ const Login = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const auth = useAuth();
+    const {user, setUser, showPassword, setShowPassword} = useAuth();
     const navigate = useNavigate();
 
     // if already logged in, redirect to /dashboard
     useEffect(() => {
-        if (auth.user) {
+        if (user) {
             return navigate("/dashboard");
         }
     }, []);
@@ -46,7 +46,7 @@ const Login = () => {
             if (response.status === 200) {
                 toast("Loggon in");
                 localStorage.setItem("user", JSON.stringify(response.data.user));
-                auth.setUser(response.data.user);
+                setUser(response.data.user);
                 navigate("/dashboard");
             }
         } catch (error) {
@@ -89,14 +89,17 @@ const Login = () => {
                             required={true}
                         />
                     </div>
-                    <div>
+                    <div className="relative">
                         <Input
-                            type={"password"}
+                            type={showPassword ? "test" : "password"}
                             value={password}
                             setValue={setPassword}
                             placeHolder={"Enter your Password"}
                             required={true}
                         />
+                        <span 
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute top-2 right-3 cursor-pointer  text-xl">{showPassword ? '🫣' : '😴'}</span>
                     </div>
                     <div className="mt-5 flex flex-col sm:flex-row gap-2 text-sm text-gray-600 font-semibold items-center">
                         <p>New here?</p>

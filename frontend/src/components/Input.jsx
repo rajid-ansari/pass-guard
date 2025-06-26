@@ -47,6 +47,7 @@ const Input = React.forwardRef(
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     className={`py-2 px-4 rounded-md font-poppins text-dark border-[1px] border-gray-300 w-full outline-none z-10`}
+                    {...props}
                 />
             </div>
         );

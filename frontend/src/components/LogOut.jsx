@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/UserContextProvider";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
-const LogOut = () => {
+const LogOut = ({className, ...props}) => {
     const navigate = useNavigate();
     const { setUser } = useAuth();
 
@@ -23,6 +23,8 @@ const LogOut = () => {
             }
         } catch (error) {
             console.log(`logout errr :: ${error}`);
+            setUser(null);
+            localStorage.removeItem("user");
             navigate("/login");
         }
     };
@@ -30,7 +32,7 @@ const LogOut = () => {
     return (
         <button
             onClick={handleLogout}
-            className="bg-red-600 mg:py-2 lg:py-2 py-1 text-center text-wrap px-3 rounded-md border-1 border-white shadow-2xl font-medium font-poppins text-light cursor-pointer hover:bg-red-700 transition-all"
+            className={`bg-red-600 mg:py-2 lg:py-2 py-1 text-center px-3 rounded-md shadow-2xl font-medium font-poppins text-light cursor-pointer hover:bg-red-700 transition-all ${className}`}
         >
             Log out
         </button>

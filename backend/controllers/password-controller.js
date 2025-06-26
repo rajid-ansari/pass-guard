@@ -117,7 +117,7 @@ module.exports.updatePassword = async (req, res) => {
         await voultModel.findByIdAndUpdate(passwordId, {
             site,
             username,
-            password: encryptPassword,
+            password: encryptedData,
             iv,
         });
 

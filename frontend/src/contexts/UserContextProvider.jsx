@@ -5,6 +5,7 @@ export const userContext = createContext();
 const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
 
     if(loading) {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -13,7 +14,7 @@ const UserContextProvider = ({ children }) => {
     }
 
     return (
-        <userContext.Provider value={{ user, setUser }}>
+        <userContext.Provider value={{ user, setUser, showPassword, setShowPassword }}>
             {children}
         </userContext.Provider>
     );

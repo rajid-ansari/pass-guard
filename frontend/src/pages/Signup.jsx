@@ -16,7 +16,7 @@ const Signup = () => {
 
     const navigate = useNavigate();
 
-    const { setUser } = useAuth();
+    const { setUser, showPassword, setShowPassword } = useAuth();
 
     const isValidEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -109,13 +109,16 @@ const Signup = () => {
                             placeHolder={"Enter your Email"}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-3 relative">
                         <Input
+                            type={showPassword ? "test" : "password"}
                             value={password}
                             setValue={setPassword}
-                            type={"password"}
                             placeHolder={"Enter your Password"}
                         />
+                        <span 
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute top-2 right-3 cursor-pointer  text-xl">{showPassword ? '🫣' : '😴'}</span>
                     </div>
                     <div className="mt-5 flex flex-col sm:flex-row gap-2 text-sm text-gray-600 font-semibold items-center">
                         <p>Already have an account?</p>
