@@ -79,14 +79,14 @@ const Dashboard = () => {
                 </div>
             </nav>
             {/* Main Content */}
-            <div className="flex flex-1 w-full relative">
+            <div className="flex flex-1 w-0 md:w-full">
                 {/* Sidebar */}
-                <aside className="h-full w-2/12">
+                <aside className="h-full w-0 lg:w-2/12">
                     <Sidebar />
                 </aside>
                 {/* Main Panel */}
                 <section
-                    className="flex-1 w-full md:w-10/12 absolute md:static top-14 right-0 border-l-0 md:border-l-2 border-light shadow-2xl z-1 py-2 px-3 md:px-7 bg-white"
+                    className="flex-1 min-h-full w-full lg:w-10/12 absolute md:static top-14 right-0 border-l-0 md:border-l-2 border-light shadow-2xl z-1 py-2 px-3 md:px-7"
                 >
                     <div className="mt-3 ml-0 md:ml-5 flex flex-col sm:flex-row sm:items-center gap-3">
                         <button
@@ -107,24 +107,24 @@ const Dashboard = () => {
                             voults.map((voult) => (
                                 <div
                                     key={voult._id}
-                                    className="min-h-28 w-full sm:w-[48%] md:w-[31%] lg:w-[23%] py-2 px-3 rounded-md bg-light shadow-lg text-wrap border-[1px] border-dark/30 flex flex-col mb-2"
+                                    className="min-h-28 w-full sm:w-[48%] md:w-[31%] lg:w-[23%] py-2 px-3 rounded-md bg-dark/80 shadow-lg text-wrap border-[1px] border-dark/30 flex flex-col mb-2"
                                 >
-                                    <h2 className="text-center mb-2 font-semibold font-poppins text-primary underline break-words">
+                                    <h2 className="text-center mb-2 font-semibold font-poppins text-light underline break-words">
                                         {voult.site}
                                     </h2>
-                                    <p className="text-gray-600 font-outfit break-all">
+                                    <p className="text-gray-300 font-outfit break-all">
                                         username ~
-                                        <span className="text-gray-800 font-semibold">
+                                        <span className="text-gray-200 font-semibold">
                                             {" "}
                                             {voult.username}
                                         </span>
                                     </p>
-                                    <div className="text-gray-600 font-outfit flex items-center">
+                                    <div className="text-gray-300 font-outfit flex items-center">
                                         <span className="w-24">Password ~</span>
                                         <input
                                             type="password"
                                             value={voult.password}
-                                            className="text-gray-800 w-2/3 outline-none bg-transparent"
+                                            className="text-gray-200 w-2/3 outline-none bg-transparent"
                                             disabled
                                         />
                                     </div>

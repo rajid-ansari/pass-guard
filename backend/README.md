@@ -204,11 +204,22 @@ http://localhost:3000/
 
 ---
 
-## Notes
-- All protected routes require a valid JWT token in the `accessToken` cookie or `Authorization` header.
-- Passwords are stored encrypted in the database.
-- Replace example values with your actual data.
-- Status codes are provided for each endpoint.
+## Environment Variables
+
+The following environment variables are required to run the backend server:
+
+- `PORT` – Port for the server (default: 3000)
+- `DB_URI` – MongoDB connection URI (e.g., `mongodb://localhost:27017`)
+- `DB_NAME` – MongoDB database name (e.g., `passguard`)
+- `JWT_SECRET_KEY` – Secret key for signing JWT tokens
+- `SECRET_ENCRYPTION_KEY` – 32-byte (64 hex chars) key for AES-256-CBC encryption
+
+## Additional Notes
+- All timestamps (createdAt, updatedAt) are included in API responses for user and password records.
+- The `/password/my-passwords` endpoint returns all passwords for the authenticated user, decrypted before sending.
+- Passwords are encrypted using AES-256-CBC with a key from `SECRET_ENCRYPTION_KEY`.
+- The backend uses HTTP-only cookies for authentication by default, but also supports Bearer tokens in the `Authorization` header.
+- Database connection and encryption will fail if required environment variables are missing or invalid.
 
 ---
 

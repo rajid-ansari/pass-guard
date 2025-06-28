@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/UserContextProvider";
 import { ToastContainer, toast } from 'react-toastify';
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -99,7 +100,7 @@ const Login = () => {
                         />
                         <span 
                         onClick={() => setShowPassword((prev) => !prev)}
-                        className="absolute top-2 right-3 cursor-pointer  text-xl">{showPassword ? '🫣' : '😴'}</span>
+                        className="absolute top-2 right-3 cursor-pointer  text-xl">{showPassword ? <FaEyeSlash title="Hide" /> : <FaEye title="See" />}</span>
                     </div>
                     <div className="mt-5 flex flex-col sm:flex-row gap-2 text-sm text-gray-600 font-semibold items-center">
                         <p>New here?</p>

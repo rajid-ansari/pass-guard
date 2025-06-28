@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/UserContextProvider";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import generatePassword from "../../utils/generatePassword";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -136,7 +137,7 @@ const AddPassword = React.forwardRef(
                         <span
                             onClick={() => setShowPassword((prev) => !prev)}
                             className="absolute top-2 right-24 text-xl cursor-pointer z-10 font-outfit"
-                        >{showPassword ? '🫣' : '😴'}</span>
+                        >{showPassword ? <FaEyeSlash title="Hide" /> : <FaEye title="See" />}</span>
                         <span
                             onClick={handlePasswordGenerate}
                             className="absolute top-1 right-2 bg-accent active:bg-accent/90 text-light p-1 cursor-pointer rounded-md font-outfit"
