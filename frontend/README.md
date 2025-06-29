@@ -32,7 +32,7 @@ A modern, secure, and user-friendly password manager web application built with 
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/yourusername/passguard.git
+   git clone https://github.com/rajid-ansari/passguard.git
    cd passguard/frontend
    ```
 2. **Install dependencies:**
