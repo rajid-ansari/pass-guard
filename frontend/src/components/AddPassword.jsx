@@ -44,6 +44,7 @@ const AddPassword = React.forwardRef(
                 if (response.status === 201) {
                     toast("Password saved");
                     setShowPasswordPanel(false);
+                    window.location.reload(); // temporary quick fix
                 }
             } catch (error) {
                 console.error(`password save error ${error}`);

@@ -37,7 +37,7 @@ const Dashboard = () => {
     };
     useEffect(() => {
         getPasswords();
-    }, [voults]);
+    }, []);
 
     useGSAP(() => {
         if (showAddPasswordPanel) {

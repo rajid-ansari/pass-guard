@@ -10,7 +10,7 @@ A modern, secure password manager with a React frontend and Node.js/Express back
 
 1. **Clone the repo:**
    ```sh
-   git clone https://github.com/rajid-ansari/passguard.git
+   git clone https://github.com/rajid-ansari/pass-guard.git
    cd passguard
    ```
 2. **Setup backend:**
