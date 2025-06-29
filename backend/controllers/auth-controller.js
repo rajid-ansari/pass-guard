@@ -44,8 +44,8 @@ module.exports.registerUser = async (req, res) => {
         if (token) {
             res.cookie("accessToken", token, {
                 httpOnly: true,
-                secure: false,
-                sameSite: "Lax",
+                secure: true,
+                sameSite: "None",
                 maxAge: 60 * 60 * 1000, //1hour ----- need to change later
             });
             res.status(201).json({
@@ -78,8 +78,8 @@ module.exports.loginUser = async (req, res) => {
         const token = generateToken(user._id);
         res.cookie("accessToken", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "Lax",
+            secure: true,
+            sameSite: "None",
             maxAge: 60 * 60 * 1000, //1hour ----- need to change later
         });
         res.status(200).json({ message: "Logged in successfully", user });
