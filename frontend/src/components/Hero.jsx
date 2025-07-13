@@ -21,11 +21,11 @@ const Hero = () => {
                     <LinkBtn path={"/login"}>Try it now</LinkBtn>
                 </div>
             </div>
-            <div className="w-full md:w-1/2 flex items-end justify-center md:pl-20 px-6 md:px-0 -mb-7 md:mb-0">
+            <div className="w-full md:w-1/2 flex items-end justify-center md:pl-20 px-6 md:px-0 -mb-7 md:mb-0 h-[55%] md:h-[100%]">
                 <img
                     src={hero}
                     alt=""
-                    className="h-[56%] md:h-[80%] lg:h-[90%] rounded-t-3xl object-cover transition-all duration-300"
+                    className="h-[100%] md:h-[80%] lg:h-[90%] rounded-t-3xl object-cover transition-all duration-300"
                 />
             </div>
         </div>
